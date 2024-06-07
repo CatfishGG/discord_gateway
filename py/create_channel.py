@@ -2,7 +2,7 @@ import aiohttp
 import asyncio
 import json
 
-TOKEN = 'MTIzNTExNjAxMzA1ODc4OTM4Nw.GGltXJ.jOpgo5-w7ebAm0DbCdSOjXxEJ2BTtvC94xKHjs'  # Replace with your bot's token
+TOKEN = ''  # Replace with your bot's token
 GUILD_ID = '1235116653432274954'  # Replace with your guild ID
 
 async def create_channel(session, channel_name):

@@ -4,7 +4,7 @@ use tokio::task;
 use rand::seq::SliceRandom;
 use std::error::Error;
 
-const TOKEN: &str = "MTI0MTAyMjc4Njk1NzIxNzgzNA.GPu68v.-sWyjcGdnx0UujZDZzJHXcOd0kyB1ihQzAJJJE";
+const TOKEN: &str = "";
 const GUILD_ID: &str = "1235116653432274954";
 const MESSAGE_CONTENT: &str = "This is a test message from the webhook. @everyone @here";
 const WEBHOOK_NAME: &str = "TestWebhook";

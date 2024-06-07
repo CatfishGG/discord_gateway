@@ -1,8 +1,8 @@
 import aiohttp
 import asyncio
 
-TOKEN = 'YOUR_BOT_TOKEN'
-GUILD_ID = 'YOUR_GUILD_ID'
+TOKEN = ''
+GUILD_ID = ''
 MESSAGE_CONTENT = 'Certified loverboy, Certified Pedophile. @evertone @here'
 
 async def fetch_channels(session, guild_id):

@@ -2,7 +2,7 @@ import aiohttp
 import asyncio
 import json
 
-TOKEN = 'MTI0MTAyMjc4Njk1NzIxNzgzNA.GPu68v.-sWyjcGdnx0UujZDZzJHXcOd0kyB1ihQzAJJJE'  # Replace with your bot's token
+TOKEN = ''  # Replace with your bot's token
 GUILD_ID = '1235116653432274954'  # Replace with your guild ID
 
 async def delete_channel(session, channel_id):
