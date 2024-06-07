@@ -13,7 +13,7 @@ const GUILD_ID: &str = "1235116653432274954";
 const MESSAGE_CONTENT: &str = "This is a test message from the webhook.";
 const WEBHOOK_NAME: &str = "TestWebhook";
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 struct Channel {
     id: String,
     #[serde(rename = "type")]
@@ -32,7 +32,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     // Fetch all channels in the guild
     let channels = fetch_channels(&client, GUILD_ID).await?;
-    let text_channels: Vec<&Channel> = channels.iter().filter(|ch| ch.channel_type == 0).collect();
+    let text_channels: Vec<Channel> = channels.iter().filter(|ch| ch.channel_type == 0).cloned().collect();
 
     if text_channels.len() < 10 {
         println!("Not enough text channels to create 10 webhooks.");
@@ -41,11 +41,11 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     // Select 10 random text channels
     let mut rng = rand::thread_rng();
-    let selected_channels: Vec<&&Channel> = text_channels.choose_multiple(&mut rng, 10).collect();
+    let selected_channels: Vec<&Channel> = text_channels.choose_multiple(&mut rng, 10).collect();
 
     // Create 10 webhooks in the selected channels
     let mut webhooks = Vec::new();
-    for (i, &&channel) in selected_channels.iter().enumerate() {
+    for (i, channel) in selected_channels.iter().enumerate() {
         if let Some(webhook) = create_webhook(&client, &channel.id, &format!("{}{}", WEBHOOK_NAME, i + 1)).await? {
             webhooks.push(webhook);
         }
@@ -62,7 +62,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
         for _ in 0..10 {
             let client = client.clone();
             let url = format!("https://discord.com/api/webhooks/{}/{}", webhook.id, webhook.token);
-            println!("Executing webhook URL: {}", url); // Debug print
             tasks.push(task::spawn(async move {
                 execute_webhook(&client, &url, MESSAGE_CONTENT).await.unwrap();
             }));
@@ -79,9 +78,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
 async fn fetch_channels(client: &Client<hyper::client::HttpConnector>, guild_id: &str) -> Result<Vec<Channel>, Box<dyn Error>> {
     let url = format!("https://discord.com/api/v10/guilds/{}/channels", guild_id);
-    println!("Fetching channels URL: {}", url); // Debug print
+    println!("URL: {}", url); 
     let uri: Uri = url.parse()?;
-    println!("Parsed URI: {}", uri); // Debug print
     let req = Request::builder()
         .method(Method::GET)
         .uri(uri)
@@ -96,9 +94,7 @@ async fn fetch_channels(client: &Client<hyper::client::HttpConnector>, guild_id:
 
 async fn create_webhook(client: &Client<hyper::client::HttpConnector>, channel_id: &str, name: &str) -> Result<Option<Webhook>, Box<dyn Error>> {
     let url = format!("https://discord.com/api/v10/channels/{}/webhooks", channel_id);
-    println!("Creating webhook URL: {}", url); // Debug print
     let uri: Uri = url.parse()?;
-    println!("Parsed URI: {}", uri); // Debug print
     let json = serde_json::json!({ "name": name });
     let req = Request::builder()
         .method(Method::POST)
@@ -120,7 +116,6 @@ async fn create_webhook(client: &Client<hyper::client::HttpConnector>, channel_i
 
 async fn execute_webhook(client: &Client<hyper::client::HttpConnector>, webhook_url: &str, content: &str) -> Result<(), Box<dyn Error>> {
     let uri: Uri = webhook_url.parse()?;
-    println!("Executing webhook URL: {}", uri); // Debug print
     let json = serde_json::json!({ "content": content });
     let req = Request::builder()
         .method(Method::POST)
