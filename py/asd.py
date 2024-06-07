@@ -62,7 +62,7 @@ async def main():
                     break
 
             # Create channels using the REST API
-            channel_names = [f'channel-{i+1}' for i in range(20)]  # Generate 50 channel names
+            channel_names = [f'channel-{i+1}' for i in range(10)]
             tasks = [create_channel(session, name) for name in channel_names]
             await asyncio.gather(*tasks)
 
