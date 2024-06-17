@@ -1,3 +1,7 @@
+import os
+os.system("pip install aiohttp")
+os.system("pip install aiohttp_socks")
+os.system("pip install asyncio")
 import aiohttp
 import asyncio
 import json
