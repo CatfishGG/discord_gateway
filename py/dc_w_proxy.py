@@ -1,3 +1,5 @@
+# Not sure if the code below is working because I haven't tested it out yet. (update this comment if you tested it before me)
+
 import os
 os.system("pip install aiohttp")
 os.system("pip install aiohttp_socks")
